@@ -1,4 +1,4 @@
-top="""
+body_template="""
 <html>
   <head>
     <style type="text/css">
@@ -19,13 +19,12 @@ top="""
     <script type="text/javascript" src="path/to/flashcanvas.js"></script>
     <![endif]-->
     <script type="text/javascript" src="flotr2.min.js"></script>
+    <script type="text/javascript" src="data.js"></script>
     <script type="text/javascript">
       (function () {
         var
           container = document.getElementById('container'),
-"""
-
-bottom="""
+          plot_list = getPlotList(),
           graph, i;
 
         // Draw Graph
