@@ -6,19 +6,17 @@ from string import Template
 
 NEWLINE = '\n'
 COMMA = ','
-PLOT_FILE = "output.html"
-DATA_FILE = "data.js"
 
 def write_string_to_file(file_string, file_name):
     out_file = open(file_name,'w')
     out_file.write(file_string)
     out_file.close()
 
-def write_html_to_file(html_file_string):
-    write_string_to_file(html_file_string, PLOT_FILE)
+def write_html_to_file(html_file_string, plot_file):
+    write_string_to_file(html_file_string, plot_file)
 
-def write_data_to_file(data_file_string):
-    write_string_to_file(data_file_string, DATA_FILE)
+def write_data_to_file(data_file_string, plot_list):
+    write_string_to_file(data_file_string, plot_list)
 
 def put_data_into_js_string(plot_list_as_string):
     get_data_function = Template(jstemplate.get_data_function_template)
@@ -36,7 +34,12 @@ def data_to_flotr_format(x_list, y_list):
     return return_list
 
 def flotr_line_object(data):
-    #line_object = {'data':data, 'points':{'show':True}}
     line_object = {'data':data, 'points':{'show':True}}
-    plot_list = [line_object]
-    return plot_list
+    return line_object
+
+def make_html_file(plot_data_json, plot_file, data_file):
+    plot_list_as_string = json.dumps(plot_data_json)
+    js_data_string = put_data_into_js_string(plot_list_as_string)
+    html_string = get_html()
+    write_html_to_file(html_string, plot_file)
+    write_data_to_file(js_data_string, data_file)
