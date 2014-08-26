@@ -7,9 +7,9 @@ PLOT_FILE = "output.html"
 DATA_FILE = "data.js"
 
 
-def plot(x_list, y_list):
+def plot(x_list, y_list, property_string='-'):
     data_list = html_writer.data_to_flotr_format(x_list, y_list)
-    line_object = html_writer.flotr_line_object(data_list)
+    line_object = html_writer.flotr_line_object(data_list, property_string)
     PLOT_LIST.append(line_object)
 
 

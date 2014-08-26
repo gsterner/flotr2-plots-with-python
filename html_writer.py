@@ -33,8 +33,16 @@ def data_to_flotr_format(x_list, y_list):
         return_list.append(list(z))
     return return_list
 
-def flotr_line_object(data):
-    line_object = {'data':data, 'points':{'show':True}}
+def set_line_properties(property_string, line_object):
+    if 'o' in property_string:
+        line_object['points'] = {'show':True}
+    if '-' in property_string:
+        line_object['lines'] = {'show':True}
+    return line_object
+
+def flotr_line_object(data, property_string):
+    line_object = {'data':data}
+    line_object = set_line_properties(property_string, line_object)
     return line_object
 
 def make_html_file(plot_data_json, plot_file, data_file):
