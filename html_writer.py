@@ -38,6 +38,24 @@ def set_line_properties(property_string, line_object):
         line_object['points'] = {'show':True}
     if '-' in property_string:
         line_object['lines'] = {'show':True}
+    if 'r' in property_string:
+        line_object['color'] = 'red'
+    if 'b' in property_string:
+        line_object['color'] = 'blue'
+    if 'g' in property_string:
+        line_object['color'] = 'green'
+    if 'y' in property_string:
+        line_object['color'] = 'yellow'
+    if 'm' in property_string:
+        line_object['color'] = 'magenta'
+    if 'c' in property_string:
+        line_object['color'] = 'cyan'
+    if 'w' in property_string:
+        line_object['color'] = 'white'
+    if 'k' in property_string:
+        line_object['color'] = 'black'
+
+
     return line_object
 
 def flotr_line_object(data, property_string):
