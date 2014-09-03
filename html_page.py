@@ -1,6 +1,8 @@
 body_template="""
 <html>
   <head>
+    <script type="text/javascript" src="flotr2.min.js"></script>
+    <script type="text/javascript" src="data.js"></script>
     <style type="text/css">
       body {
         margin: 0px;
@@ -14,24 +16,13 @@ body_template="""
     </style>
   </head>
   <body>
-    <div id="container"></div>
-    <!--[if IE]>
-    <script type="text/javascript" src="path/to/flashcanvas.js"></script>
-    <![endif]-->
-    <script type="text/javascript" src="flotr2.min.js"></script>
-    <script type="text/javascript" src="data.js"></script>
-    <script type="text/javascript">
-      (function () {
-        var
-          container = document.getElementById('container'),
-          plot_list = getPlotList(),
-          graph, i;
-
-        // Draw Graph
-        graph = Flotr.draw(container, plot_list, {
-        });
-      })();
-    </script>
+    <div id="container">
+$function_call_tag
+    </div>
   </body>
 </html>
 """
+
+script_tag_template="""<script type="text/javascript">
+$script
+</script>"""

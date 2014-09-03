@@ -22,9 +22,16 @@ def put_data_into_js_string(plot_list_as_string):
     get_data_function = Template(jstemplate.get_data_function_template)
     return get_data_function.substitute(plot_data_string = plot_list_as_string)
 
+def get_function_call_tag():
+    script_tag = Template(html_page.script_tag_template)
+    function_call_js = Template(jstemplate.function_call_template)
+    function_call_string = function_call_js.substitute()
+    return script_tag.substitute(script = function_call_string)
+
 def get_html():
     html = Template(html_page.body_template)
-    return html.substitute()
+    function_call_tag_string = get_function_call_tag()
+    return html.substitute(function_call_tag = function_call_tag_string)
 
 def data_to_flotr_format(x_list, y_list):
     zipped = zip(x_list, y_list)
