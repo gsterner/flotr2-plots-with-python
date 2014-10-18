@@ -28,15 +28,15 @@ def get_function_call_tag():
     function_call_string = function_call_js.substitute()
     return script_tag.substitute(script = function_call_string)
 
-def get_div_tag():
+def get_div_tag(plot_size_dict):
     div_tag = Template(html_page.div_tag_template)
-    return div_tag.substitute()
+    return div_tag.substitute(plot_size_dict)
 
-def get_html():
+def get_html(plot_size_dict):
     html = Template(html_page.body_template)
     tags = {}
     tags['function_call_tag'] = get_function_call_tag()
-    tags['div_tag'] = get_div_tag()
+    tags['div_tag'] = get_div_tag(plot_size_dict)
     return html.substitute(tags)
 
 def data_to_flotr_format(x_list, y_list):
@@ -67,8 +67,6 @@ def set_line_properties(property_string, line_object):
         line_object['color'] = 'white'
     if 'k' in property_string:
         line_object['color'] = 'black'
-
-
     return line_object
 
 def flotr_line_object(data, property_string):
@@ -76,9 +74,9 @@ def flotr_line_object(data, property_string):
     line_object = set_line_properties(property_string, line_object)
     return line_object
 
-def make_html_file(plot_data_json, plot_file, data_file):
-    plot_list_as_string = json.dumps(plot_data_json)
+def make_html_file(plot_info, plot_file, data_file):
+    plot_list_as_string = json.dumps(plot_info.get_current_line_list())
     js_data_string = put_data_into_js_string(plot_list_as_string)
-    html_string = get_html()
+    html_string = get_html(plot_info.get_plot_size())
     write_html_to_file(html_string, plot_file)
     write_data_to_file(js_data_string, data_file)

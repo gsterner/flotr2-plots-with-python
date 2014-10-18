@@ -13,13 +13,10 @@ body_template="""
   <body>
 $div_tag
 $function_call_tag
-    </div>
   </body>
 </html>
 """
-
-div_tag_template="""<div id="container" style="width : 600px; height : 400px;"></div>"""
-
+div_tag_template="""<div id="container" style="width : ${width}px; height : ${height}px;"></div>"""
 
 script_tag_template="""<script type="text/javascript">
 $script
