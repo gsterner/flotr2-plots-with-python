@@ -8,20 +8,18 @@ body_template="""
         margin: 0px;
         padding: 0px;
       }
-      #container {
-        width : 600px;
-        height: 384px;
-        margin: 8px auto;
-      }
     </style>
   </head>
   <body>
-    <div id="container">
+$div_tag
 $function_call_tag
     </div>
   </body>
 </html>
 """
+
+div_tag_template="""<div id="container" style="width : 600px; height : 400px;"></div>"""
+
 
 script_tag_template="""<script type="text/javascript">
 $script

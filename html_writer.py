@@ -28,10 +28,16 @@ def get_function_call_tag():
     function_call_string = function_call_js.substitute()
     return script_tag.substitute(script = function_call_string)
 
+def get_div_tag():
+    div_tag = Template(html_page.div_tag_template)
+    return div_tag.substitute()
+
 def get_html():
     html = Template(html_page.body_template)
-    function_call_tag_string = get_function_call_tag()
-    return html.substitute(function_call_tag = function_call_tag_string)
+    tags = {}
+    tags['function_call_tag'] = get_function_call_tag()
+    tags['div_tag'] = get_div_tag()
+    return html.substitute(tags)
 
 def data_to_flotr_format(x_list, y_list):
     zipped = zip(x_list, y_list)
