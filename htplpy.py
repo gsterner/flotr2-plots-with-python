@@ -3,7 +3,6 @@ import webbrowser
 import html_writer
 
 PLOT_FILE = "output.html"
-DATA_FILE = "data.js"
 
 class PlotInfo:
     def __init__(self):
@@ -30,5 +29,5 @@ def plot(x_list, y_list, property_string='-'):
 
 
 def show():
-    html_writer.make_html_file(plot_info, PLOT_FILE, DATA_FILE)
+    html_writer.make_html_file(plot_info, PLOT_FILE)
     webbrowser.open(PLOT_FILE)
