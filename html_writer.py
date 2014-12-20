@@ -1,6 +1,5 @@
 import html_page
 import jstemplate
-import json
 import webbrowser
 from string import Template
 
