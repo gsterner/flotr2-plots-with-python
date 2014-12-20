@@ -30,15 +30,31 @@ class PlotInfo:
     def get_plot_list_as_string(self):
         return json.dumps(self.get_line_list())
 
+class FigureInfo:
+    def __init__(self, rows = 1, cols = 1):
+        plot_info = PlotInfo()
+        self._plots = [plot_info]
+        self._config = (rows, cols)
+        self._current_plot = 0
 
-plot_info = PlotInfo()
+    def get_plot_info_at(self, index):
+        return self._plots[index]
+
+    def get_plot_info_at_subplot(self, subplot_index):
+        if(subplot_index) > 0:
+            return self._plots[index-1]
+        return None
+
+    def get_current_plot(self):
+        return self._plots[self._current_plot]
+
+fig_info = FigureInfo()
 
 def plot(x_list, y_list, property_string='-'):
     data_list = html_writer.data_to_flotr_format(x_list, y_list)
     line_object = html_writer.flotr_line_object(data_list, property_string)
-    plot_info.append_line(line_object)
-
+    fig_info.get_current_plot().append_line(line_object)
 
 def show():
-    html_writer.make_html_file(plot_info, PLOT_FILE)
+    html_writer.make_html_file(fig_info.get_current_plot(), PLOT_FILE)
     webbrowser.open(PLOT_FILE)
