@@ -9,7 +9,9 @@ class PlotInfo:
         self._config = (1,1)
         self._current_plot = 0
         self._sub_plots = [[]]
-        self.plot_size = {'width': 600, 'height' : 400}
+        self.width = 600
+        self.height = 400
+        self.container_id = 'container_hej'
 
     def append_line_to_current(self, line_object):
         self._sub_plots[self._current_plot].append(line_object)
@@ -18,7 +20,18 @@ class PlotInfo:
         return self._sub_plots[self._current_plot]
 
     def get_plot_size(self):
-        return self.plot_size
+        return {'width': self.width, 'height' : self.height}
+
+    def get_container_info(self):
+        return_dict = {'width': self.width,
+                       'height' : self.height,
+                       'container_id': self.container_id,
+                       'plot_list_as_string': self.get_plot_list_as_string()}
+        return return_dict
+
+    def get_plot_list_as_string(self):
+        return json.dumps(self.get_current_line_list())
+
 
 plot_info = PlotInfo()
 

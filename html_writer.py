@@ -22,21 +22,29 @@ def put_data_into_js_string(plot_list_as_string):
     get_data_function = Template(jstemplate.get_data_function_template)
     return get_data_function.substitute(plot_data_string = plot_list_as_string)
 
-def get_function_call_tag(plot_list_as_string):
+def get_function_call_tag(plot_info_dict):
     script_tag = Template(html_page.script_tag_template)
     function_call_js = Template(jstemplate.function_call_template)
-    function_call_string = function_call_js.substitute(plot_data_string = plot_list_as_string)
+    function_call_string = function_call_js.substitute(plot_info_dict)
     return script_tag.substitute(script = function_call_string)
 
-def get_div_tag(plot_size_dict):
-    div_tag = Template(html_page.div_tag_template)
-    return div_tag.substitute(plot_size_dict)
+def get_container_tag(plot_info_dict):
+    container = Template(html_page.container_tag_template)
+    return container.substitute(plot_info_dict)
 
-def get_html(plot_size_dict, plot_list_as_string):
+def get_plot_row(plot_info_dict):
+    row = Template(html_page.table_row_template)
+    return row.substitute(container = get_container_tag(plot_info_dict))
+
+def get_plot_table(plot_info_dict):
+    table = Template(html_page.table_template)
+    return table.substitute(table_row = get_plot_row(plot_info_dict))
+
+def get_html(plot_info_dict):
     html = Template(html_page.body_template)
     tags = {}
-    tags['function_call_tag'] = get_function_call_tag(plot_list_as_string)
-    tags['div_tag'] = get_div_tag(plot_size_dict)
+    tags['function_call_tag'] = get_function_call_tag(plot_info_dict)
+    tags['plot_table'] = get_plot_table(plot_info_dict)
     return html.substitute(tags)
 
 def data_to_flotr_format(x_list, y_list):
@@ -75,7 +83,6 @@ def flotr_line_object(data, property_string):
     return line_object
 
 def make_html_file(plot_info, plot_file):
-    plot_list_as_string = json.dumps(plot_info.get_current_line_list())
-    html_string = get_html(plot_info.get_plot_size(), plot_list_as_string)
+    html_string = get_html(plot_info.get_container_info())
     write_html_to_file(html_string, plot_file)
 
