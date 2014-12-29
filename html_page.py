@@ -15,7 +15,7 @@ $function_call_tag
   </body>
 </html>
 """
-container_tag_template="""<div id="${container_id}" style="width : ${width}px; height : ${height}px;"></div>"""
+container_tag_template="""<div id="${container_id}" style="width : ${width}px; display: table-cell;"></div>"""
 
 table_template="""
 <div style="width: 1300px; height:400px; display: table;">

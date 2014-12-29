@@ -5,11 +5,11 @@ import html_writer
 PLOT_FILE = "output.html"
 
 class PlotInfo:
-    def __init__(self):
+    def __init__(self, name = 'container'):
         self._lines = []
         self.width = 600
         self.height = 400
-        self.container_id = 'container_hej'
+        self.container_id = name
 
     def append_line(self, line_object):
         self._lines.append(line_object)
@@ -30,12 +30,23 @@ class PlotInfo:
     def get_plot_list_as_string(self):
         return json.dumps(self.get_line_list())
 
+
+def create_subplot_name( index, rows, cols):
+    return 'subplot_'+str(rows) + '_' + str(rows) + '_' + str(index)
+
+def create_subplot(index, rows, cols):
+    subplot_name = create_subplot_name(index, rows, cols)
+    return PlotInfo(subplot_name)
+
+def create_subplots(rows, cols):
+    return [create_subplot(index, rows, cols) for index in range(rows * cols)]
+
+
 class FigureInfo:
     def __init__(self, rows = 1, cols = 1):
-        plot_info = PlotInfo()
-        self._plots = [plot_info]
-        self._config = (rows, cols)
-        self._current_plot = 0
+        self._plots = create_subplots(rows, cols)
+        self._rows = rows
+        self._cols = cols
 
     def get_plot_info_at(self, index):
         return self._plots[index]
@@ -45,16 +56,42 @@ class FigureInfo:
             return self._plots[index-1]
         return None
 
-    def get_current_plot(self):
-        return self._plots[self._current_plot]
+    def rows(self):
+        return self._rows
+
+    def cols(self):
+        return self._cols
+
+    def no_plots(self):
+        return self._rows*self._cols
+
+    def get_plot(self, index):
+        return self._plots[index]
+
 
 fig_info = FigureInfo()
+current_plot = 0
+do_subplot = False
+
+def subplot(rows, cols, index):
+    global do_subplot
+    global fig_info
+    global current_plot
+    current_plot = index - 1
+    print '->', current_plot
+    if not do_subplot:
+        fig_info = FigureInfo(rows, cols)
+        do_subplot = True
 
 def plot(x_list, y_list, property_string='-'):
+    global fig_info
+    print 'PLOT', current_plot
     data_list = html_writer.data_to_flotr_format(x_list, y_list)
     line_object = html_writer.flotr_line_object(data_list, property_string)
-    fig_info.get_current_plot().append_line(line_object)
+    fig_info.get_plot(current_plot).append_line(line_object)
 
 def show():
-    html_writer.make_html_file(fig_info.get_current_plot(), PLOT_FILE)
+    for p in fig_info._plots:
+        print p._lines
+    html_writer.make_html_file(fig_info, PLOT_FILE)
     webbrowser.open(PLOT_FILE)

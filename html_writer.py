@@ -27,23 +27,46 @@ def get_function_call_tag(plot_info_dict):
     function_call_string = function_call_js.substitute(plot_info_dict)
     return script_tag.substitute(script = function_call_string)
 
+def get_function_tags(fig_info):
+    tags = ""
+    for p in range(fig_info.no_plots()):
+        plot_info = fig_info.get_plot(p)
+        plot_info_dict = plot_info.get_container_info()
+        tags += get_function_call_tag(plot_info_dict)
+    return tags
+
 def get_container_tag(plot_info_dict):
     container = Template(html_page.container_tag_template)
     return container.substitute(plot_info_dict)
 
-def get_plot_row(plot_info_dict):
-    row = Template(html_page.table_row_template)
-    return row.substitute(container = get_container_tag(plot_info_dict))
+def get_row(fig_info, row_index):
+    row= ""
+    start_index = fig_info.cols() * row_index
+    col_indices = range(start_index, start_index + fig_info.cols())
+    for cols in col_indices:
+        plot_info = fig_info.get_plot(cols)
+        plot_info_dict = plot_info.get_container_info()
+        row += get_container_tag(plot_info_dict)
+    return row
 
-def get_plot_table(plot_info_dict):
+def get_rows(fig_info):
+    table = ""
+    for row_index in range(fig_info.rows()):
+        row_content = get_row(fig_info, row_index)
+        row = Template(html_page.table_row_template)
+        table += row.substitute(container = row_content)
+    return table
+
+def get_plot_table(fig_info):
     table = Template(html_page.table_template)
-    return table.substitute(table_row = get_plot_row(plot_info_dict))
+    row = get_rows(fig_info)
+    return table.substitute(table_row = row)
 
-def get_html(plot_info_dict):
+def get_html(fig_info):
     html = Template(html_page.body_template)
     tags = {}
-    tags['function_call_tag'] = get_function_call_tag(plot_info_dict)
-    tags['plot_table'] = get_plot_table(plot_info_dict)
+    tags['function_call_tag'] = get_function_tags(fig_info)
+    tags['plot_table'] = get_plot_table(fig_info)
     return html.substitute(tags)
 
 def data_to_flotr_format(x_list, y_list):
@@ -81,7 +104,7 @@ def flotr_line_object(data, property_string):
     line_object = set_line_properties(property_string, line_object)
     return line_object
 
-def make_html_file(plot_info, plot_file):
-    html_string = get_html(plot_info.get_container_info())
+def make_html_file(fig_info, plot_file):
+    html_string = get_html(fig_info)
     write_html_to_file(html_string, plot_file)
 
